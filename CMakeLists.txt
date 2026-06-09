@@ -8,12 +8,17 @@ endif (NOT DEFINED CMAKE_BUILD_TYPE)
 find_package(Boost REQUIRED OPTIONAL_COMPONENTS system)
 find_package(Threads)
 
+if (WIN32)
 add_library(${PROJECT_NAME} STATIC
   src/comm.cpp
-#  src/udp.cpp
   src/serial.cpp
-#  src/tcp_client.cpp
 )
+else()
+add_library(${PROJECT_NAME} SHARED
+  src/comm.cpp
+  src/serial.cpp
+)
+endif()
 target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
